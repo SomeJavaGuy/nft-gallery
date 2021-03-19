@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import logo from "./logo.svg";
 import "./App.css";
+import ProviderTest from "./pages/test/providerTest";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
           </div>
         </Route>
         <Route path="/test">
-          <p>hello NFT world</p>
+          <ProviderTest />
         </Route>
       </Switch>
     </Router>
