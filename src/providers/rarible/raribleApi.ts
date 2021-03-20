@@ -21,7 +21,7 @@ const parseResponse = (payload: any) => {
   }
 };
 
-export default class OpenSeaApi implements Api {
+export default class RaribleApi implements Api {
   async fetchAssets(params: FetchAssets) {
     const { owner = "" } = params;
     let payload;
