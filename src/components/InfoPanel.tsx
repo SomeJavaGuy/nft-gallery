@@ -14,11 +14,10 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ info, position, ...props }) => {
     <Html
       position={[x, y, z]}
       style={{
-        backgroundColor: "rgb(0 0 0 / 50%)",
+        backgroundColor: "rgb(0 0 0 / 75%)",
         color: "white",
         borderRadius: "6px",
         padding: "0 10px 0 10px",
-        background: "rgba( 255, 255, 255, 0.35 )",
         boxShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
         backdropFilter: "blur( 4.5px )",
         border: "1px solid rgba( 255, 255, 255, 0.18 )",

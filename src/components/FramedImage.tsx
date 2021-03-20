@@ -11,7 +11,7 @@ import Image, { ImageProps } from "./Image";
 import InfoPanel from "./InfoPanel";
 
 const IMG_MAX_WIDTH = 2;
-const IMG_MAX_HEIGHT = 3;
+const IMG_MAX_HEIGHT = 1.5;
 
 type FramedImageProps = {
   imageUrl: string;
@@ -33,17 +33,20 @@ const FramedImage: React.FC<FramedImageProps> = ({
   metadata,
   ...props
 }) => {
+
+  const [isLoading, setLoading] = useState(true);
+
   const [hover, setHover] = useState(false);
 
-  const [frameScaleX, setFrameScaleX] = useState<number>();
-  const [frameScaleY, setFrameScaleY] = useState<number>();
+  const [frameScaleX, setFrameScaleX] = useState<number>(-1);
+  const [frameScaleY, setFrameScaleY] = useState<number>(-1);
 
-  const [width, setWidth] = useState<number>();
-  const [height, setHeight] = useState<number>();
+  const [width, setWidth] = useState<number>(-1);
+  const [height, setHeight] = useState<number>(-1);
 
-  const [scaleRatio, setScaleRatio] = useState<number>();
+  const [scaleRatio, setScaleRatio] = useState<number>(-1);
 
-  const [imageBase64, setImageBase64] = useState<any>();
+  const [imageBase64, setImageBase64] = useState<any>(null);
   const [x, y, z] = position;
   const { path, infoXOffset, infoYOffset } = frames[frame];
 
@@ -51,16 +54,16 @@ const FramedImage: React.FC<FramedImageProps> = ({
 
   const ref = useRef<Object3D>();
 
+  console.log("FramedImage init")
+
   //Used to test if the pointer intersects with the current object (the test is made on the image object)
   useFrame(() => {
     if (ref.current) {
       raycaster.setFromCamera({ x: 0, y: 0 }, camera);
       var intersects = raycaster.intersectObject(ref.current)
       if (intersects.length > 0) {
-        //console.log("Does intersect")
         setHover(true);
       } else {
-        // console.log("Does not intersect")
         setHover(false);
       }
     }
@@ -71,6 +74,9 @@ const FramedImage: React.FC<FramedImageProps> = ({
     if (imageUrl.indexOf("ipfs://ipfs/") > -1) {
       imageUrl = imageUrl.replace("ipfs://ipfs/", "https://ipfs.io/ipfs/");
     }
+
+    console.log("Loading image " + imageUrl);
+
     axios.get(imageUrl, {
       responseType: 'arraybuffer'
     })
@@ -79,44 +85,44 @@ const FramedImage: React.FC<FramedImageProps> = ({
         let base64 = Buffer.from(response.data, 'binary').toString('base64')
         const img = new window.Image();
         img.onload = function () {
-          setWidth((this as any).width);
-          setHeight((this as any).height);
-          //alert((this as any).width + 'x' + (this as any).height);
-          setImageBase64(img.src);
-
-          //Evaluate current image ratio based on those max width and max height
-          if (height && width) {
-            var hRatio = height / IMG_MAX_HEIGHT;
-
-            var wRatio = width / IMG_MAX_WIDTH;
-            console.log("hRatio " + hRatio);
-            console.log("wRatio " + wRatio);
-            var scaleRatio = 1;
-            if (hRatio > wRatio && hRatio > 1) {
-              scaleRatio = 1 / hRatio;
-            } else if (wRatio > hRatio && wRatio > 1) {
-              scaleRatio = 1 / wRatio;
-            }
-            setScaleRatio(scaleRatio);
-            console.log("scaleRatio " + scaleRatio);
-
-            setFrameScaleX(0.036 * scaleRatio * width);
-            setFrameScaleY(0.027 * scaleRatio * height);
+          var width = (this as any).width;
+          var height = (this as any).height;
+          //Evaluate current image ratio based on max width and max height
+          var hRatio = height / IMG_MAX_HEIGHT;
+          var wRatio = width / IMG_MAX_WIDTH;
+          //console.log("hRatio " + hRatio);
+          //console.log("wRatio " + wRatio);
+          var scaleRatio = 1;
+          if (hRatio > wRatio && hRatio > 1) {
+            scaleRatio = 1 / hRatio;
+          } else if (wRatio > hRatio && wRatio > 1) {
+            scaleRatio = 1 / wRatio;
           }
+          setWidth(width);
+          setHeight(height);
+          setScaleRatio(scaleRatio);
+          setFrameScaleX(0.036 * scaleRatio * width);
+          setFrameScaleY(0.027 * scaleRatio * height);
+          setImageBase64(img.src);
+          setLoading(false);
         }
         img.src = 'data:image/png;base64,' + base64;
       })
       .catch(function (error) {
         // handle error
         console.log(error);
+        setLoading(false);
       })
-  });
+  }, []);
 
+  if (isLoading || width == -1 || height == -1 || scaleRatio == -1 || frameScaleX == -1 || frameScaleY == -1 || !imageBase64) {
+    return <mesh />;
+  }
 
-  //Resize frame scale (w and h) depending on image previous ratio
-  //Display the info panel at the right place
+  //console.log("w " + width + " h " + height);
 
   return (
+
     <Suspense fallback={null}>
       {hover && (
         <InfoPanel

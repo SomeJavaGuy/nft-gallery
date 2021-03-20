@@ -34,7 +34,7 @@ function Gallery() {
                 tokens = tokens.filter((asset) => {
                     count++;
                     //DEBUG: HARD LIMIT SET TO 5
-                    if (count > 20)
+                    if (count > 10)
                         return false;
 
                     return asset.image_url != null && typeof asset.image_url != "undefined"
@@ -83,7 +83,7 @@ function Gallery() {
                             yFrameOffset={collections.hashmasks.frames[170336].yOffset}
                             zFrameOffset={collections.hashmasks.frames[170336].zOffset}
                             */
-                            position={[i += 3.5, 1.5, 0]}
+                            position={[i += 3.5, 1.10, 0]}
                             metadata={{
                                 "Name": asset.name || "",
                                 "Bid": asset.last_sale?.payment_token + " Ξ",
