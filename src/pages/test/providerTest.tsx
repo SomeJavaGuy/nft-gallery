@@ -20,9 +20,20 @@ const ProviderTest = () => {
   }, []);
 
   return (
-    <div>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(5, auto)",
+        gridTemplateRows: "auto",
+      }}
+    >
       {assets?.length > 0 &&
-        assets.map((asset) => JSON.stringify(asset, null, 2))}
+        assets.map((asset) => (
+          <div key={asset.name}>
+            <img src={asset.image_url} alt="" style={{ width: "100px" }} />
+            <p>{asset.name}</p>
+          </div>
+        ))}
     </div>
   );
 };
