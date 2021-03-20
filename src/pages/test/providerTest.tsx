@@ -3,6 +3,7 @@ import SuperRareApi from "../../providers/superRare/superRareApi";
 import RaribleApi from "../../providers/rarible/raribleApi";
 import ZoraApi from "../../providers/theGraph/zora";
 import { useParams } from "react-router-dom";
+import TwitterShare from "../../components/TwitterShare";
 
 const supportedProviders = {
   zora: ZoraApi,
@@ -43,21 +44,24 @@ const ProviderTest = () => {
   }, [owner, provider]);
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(5, auto)",
-        gridTemplateRows: "auto",
-      }}
-    >
-      {assets?.length > 0 &&
-        assets.map((asset) => (
-          <div key={asset.name}>
-            <img src={asset.image_url} alt="" style={{ width: "100px" }} />
-            <p>{asset.name}</p>
-          </div>
-        ))}
-    </div>
+    <>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(5, auto)",
+          gridTemplateRows: "auto",
+        }}
+      >
+        {assets?.length > 0 &&
+          assets.map((asset) => (
+            <div key={asset.name}>
+              <img src={asset.image_url} alt="" style={{ width: "100px" }} />
+              <p>{asset.name}</p>
+            </div>
+          ))}
+      </div>
+      <TwitterShare />
+    </>
   );
 };
 
