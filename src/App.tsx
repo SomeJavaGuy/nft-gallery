@@ -12,7 +12,7 @@ function App() {
         <Route exact path="/">
           <Landing />
         </Route>
-        <Route path="/test">
+        <Route path="/test/:provider/owner/:owner">
           <ProviderTest />
         </Route>
         <Route path="/gallery/owner/:owneraddress">
