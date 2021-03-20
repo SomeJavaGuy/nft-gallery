@@ -14,7 +14,7 @@ export type NormalizedAsset = {
   image_original_url?: string | null;
   background_color?: string | null;
   external_link: string | null;
-  asset_contract: {
+  asset_contract?: {
     address: string;
   };
   last_sale?: {
