@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import RaribleApi from "../../providers/rarible/raribleApi";
+// import RaribleApi from "../../providers/rarible/raribleApi";
+import ZoraApi from "../../providers/theGraph/zora";
 
 const ProviderTest = () => {
   const [assets, setAssets] = useState<any[]>([]);
 
   useEffect(() => {
-    let api = new RaribleApi();
+    let api = new ZoraApi();
     api
-      .getTokensByOwner("0x492c6cef17ae4ed70a1a09b21126c3e2e091febb")
+      .getTokensByOwner("0x7a6f726121030cadf9923333d5b6f29277024027")
       .then((tokens: any) => {
         console.log(`tokens`, tokens);
         setAssets(tokens);
