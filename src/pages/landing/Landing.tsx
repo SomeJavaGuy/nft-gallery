@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ReactGA from 'react-ga';
 import { useHistory } from "react-router";
 import "./Landing.css";
 
@@ -32,6 +33,10 @@ const LandingPage = () => {
             onSubmit={(e) => {
               e.preventDefault();
               if (formValue.length > 0) {
+                ReactGA.event({
+                  category: 'Action',
+                  action: 'Navigate to gallery'
+                });
                 history.push(`/gallery/owner/${formValue}`);
               }
             }}

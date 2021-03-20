@@ -13,6 +13,7 @@ import { NormalizedAsset } from "../types/normalizedAsset";
 import RaribleApi from "../providers/rarible/raribleApi";
 import FramedImage from "../components/FramedImage";
 
+import ReactGA from 'react-ga';
 //Sound
 //import OpenSeaApi from "../providers/opensea/openSeaApi";
 
@@ -24,6 +25,9 @@ function Gallery() {
 
     var i = 0;
     useEffect(() => {
+
+        ReactGA.pageview(window.location.pathname + window.location.search);
+
         let api = new RaribleApi();
         api
             .getTokensByOwner(owneraddress)
