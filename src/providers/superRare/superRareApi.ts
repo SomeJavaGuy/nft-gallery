@@ -30,23 +30,11 @@ export default class SuperRareApi implements Api {
     const assets = await this.fetchAssets({
       owner,
     });
-    console.log(`assets`, assets);
-    // const getTokenWithMetadata = assets.map(async (item: any) => {
-    //   const metadata = await this.getTokenMetadata(item.id);
-    //   return {
-    //     ...parseResponse(metadata),
-    //     token: item.token,
-    //     tokenId: item.tokenId,
-    //     creator: item.creator,
-    //     owner,
-    //   };
-    // });
 
     const normalizedTokens = assets.map(
       SuperRareParser.normalizeSuperRareAsset
     );
 
-    // console.log(`SuperRare tokens from ${owner}`, normalizedTokens);
     return normalizedTokens;
   }
 }
