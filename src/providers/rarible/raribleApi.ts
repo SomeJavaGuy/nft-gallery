@@ -7,7 +7,7 @@ type FetchAssets = {
   owner?: string;
 };
 
-const CORS_ANYWHERE = "http://api.allorigins.win/get?url=";
+const CORS_ANYWHERE = "https://api.allorigins.win/get?url=";
 const ITEMS_ENDPOINT =
   "http://api.rarible.com/protocol/ethereum/nft/indexer/v1/items";
 
