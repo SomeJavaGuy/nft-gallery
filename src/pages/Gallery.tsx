@@ -133,19 +133,24 @@ function Gallery() {
         ></FPSCamera>
 
         {
-        /* TODO: Disable stats in prod 
-        <Stats showPanel={0} />
-        */
+          /* TODO: Disable stats in prod 
+          <Stats showPanel={0} />
+          */
         }
 
         {assets?.length > 0 && (
           <Scene name={"scene_room_test.json"} assets={assets} />
         )}
       </Canvas>
-      <Loader
+
+
+      {/*
+            <Loader
         innerStyles={{ backgroundColor: "black" }}
         containerStyles={{ opacity: 0.9 }}
       />
+      */}
+
       <TwitterShare
         style={{
           position: "absolute",
