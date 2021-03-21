@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 import { useHistory } from "react-router";
 import "./Landing.css";
 
@@ -34,10 +34,10 @@ const LandingPage = () => {
               e.preventDefault();
               if (formValue.length > 0) {
                 ReactGA.event({
-                  category: 'Action',
-                  action: 'Navigate to gallery'
+                  category: "Action",
+                  action: "Navigate to gallery",
                 });
-                history.push(`/gallery/owner/${formValue}`);
+                history.push(`/gallery/rarible/owner/${formValue}`);
               }
             }}
           >

@@ -21,7 +21,7 @@ type FramedImageProps = {
   //yFrameOffset: number;
   //zFrameOffset: number;
   frame: Frames;
-  metadata: { [key: string]: string };
+  metadata: { [key: string]: string | null };
   onLoad: () => any;
 };
 

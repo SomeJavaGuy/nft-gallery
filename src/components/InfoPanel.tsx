@@ -3,7 +3,7 @@ import { Html } from "@react-three/drei";
 import { position } from "../types/position";
 
 type InfoPanelProps = {
-  info: { [key: string]: string };
+  info: { [key: string]: string | null };
   position: position;
 };
 
@@ -22,19 +22,21 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ info, position, ...props }) => {
         backdropFilter: "blur( 4.5px )",
         border: "1px solid rgba( 255, 255, 255, 0.18 )",
         width: "max-content",
+        maxWidth: "500px",
       }}
     >
-      {Object.entries(info).map(([key, value]) => (
-        <p
-          key={key}
-          style={{
-            textShadow: "-1px 2px 6px rgba(0, 0, 0, 0.8)",
-          }}
-        >
-          {key} : {value}
-        </p>
-      ))}
-      {/*<p><b>Click for more details</b></p>*/}
+      {Object.entries(info).map(([key, value]) =>
+        value ? (
+          <p
+            key={key}
+            style={{
+              textShadow: "-1px 2px 6px rgba(0, 0, 0, 0.8)",
+            }}
+          >
+            {key} : {value}
+          </p>
+        ) : null
+      )}
     </Html>
   );
 };

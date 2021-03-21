@@ -113,7 +113,10 @@ function Gallery() {
               rotation={[0, spawnLeftSide ? 0 : MathUtils.degToRad(180), 0]}
               metadata={{
                 Name: asset.name || "",
-                Bid: asset.last_sale?.payment_token + " Ξ",
+                TokenId: asset.token_id || null,
+                Creator: asset.creator?.address || null,
+                Description: asset.description || null,
+                Contract: asset.asset_contract?.address || null,
               }}
               onLoad={() => {
                 numberOfLoadedFrames.current = numberOfLoadedFrames.current + 1;
