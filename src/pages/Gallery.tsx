@@ -39,20 +39,15 @@ function Gallery() {
   const numberOfLoadedFrames = useRef(0);
   const { loaded, total, progress, item } = useProgress();
 
-
-
   var i = -3;
   useEffect(() => {
-
     var id = document.getElementById("loadingDiv");
 
     setTimeout(() => {
-      if (id)
-        id.style.display = "none";
+      if (id) id.style.display = "none";
     }, 6000);
 
-    if (id)
-      id.style.display = "block";
+    if (id) id.style.display = "block";
 
     ReactGA.pageview(window.location.pathname + window.location.search);
     // @ts-ignore
@@ -87,7 +82,7 @@ function Gallery() {
 
   return (
     <div style={{ height: "100vh" }}>
-      {MAX_NUMBER_ASSETS <= numberOfLoadedFrames.current && <Instructions />}
+      <Instructions />
       <Canvas
         colorManagement
         shadowMap
@@ -145,17 +140,14 @@ function Gallery() {
           height={1}
         ></FPSCamera>
 
-        {
-          /* TODO: Disable stats in prod 
+        {/* TODO: Disable stats in prod 
           <Stats showPanel={0} />
-          */
-        }
+          */}
 
         {assets?.length > 0 && (
           <Scene name={"scene_room_test.json"} assets={assets} />
         )}
       </Canvas>
-
 
       <TwitterShare
         style={{
