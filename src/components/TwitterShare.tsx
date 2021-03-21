@@ -3,12 +3,17 @@ import { TwitterShareButton } from "react-twitter-embed";
 
 const textInTweet = "Check out this NFT Gallery";
 
-const TwitterShare = () => {
+const TwitterShare = (props: any) => {
   if (typeof window === "undefined") return null;
 
   const currentURL = window.location.href;
   return (
-    <TwitterShareButton url={currentURL} options={{ text: textInTweet }} />
+    <div {...props}>
+      <TwitterShareButton
+        url={currentURL}
+        options={{ text: textInTweet, size: "large" }}
+      />
+    </div>
   );
 };
 
