@@ -116,8 +116,11 @@ function Gallery() {
           height={1}
         ></FPSCamera>
 
-        {/* TODO: Disable stats in prod */}
+        {
+        /* TODO: Disable stats in prod 
         <Stats showPanel={0} />
+        */
+        }
 
         {assets?.length > 0 && (
           <Scene name={"scene_room_test.json"} assets={assets} />
