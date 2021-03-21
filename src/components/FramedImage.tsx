@@ -22,6 +22,7 @@ type FramedImageProps = {
   //zFrameOffset: number;
   frame: Frames;
   metadata: { [key: string]: string };
+  onLoad: () => any;
 };
 
 const FramedImage: React.FC<FramedImageProps> = ({
@@ -33,9 +34,9 @@ const FramedImage: React.FC<FramedImageProps> = ({
   //zFrameOffset,
   frame,
   metadata,
+  onLoad,
   ...props
 }) => {
-
   const [isLoading, setLoading] = useState(true);
 
   const [hover, setHover] = useState(false);
@@ -56,20 +57,20 @@ const FramedImage: React.FC<FramedImageProps> = ({
 
   const ref = useRef<Object3D>();
 
-  console.log("FramedImage init")
+  console.log("FramedImage init");
 
   //Used to test if the pointer intersects with the current object (the test is made on the image object)
   useFrame(() => {
     if (ref.current) {
       raycaster.setFromCamera({ x: 0, y: 0 }, camera);
-      var intersects = raycaster.intersectObject(ref.current)
+      var intersects = raycaster.intersectObject(ref.current);
       if (intersects.length > 0) {
         setHover(true);
       } else {
         setHover(false);
       }
     }
-  })
+  });
 
   useEffect(() => {
     //Patch for IPFS protocal
@@ -79,12 +80,13 @@ const FramedImage: React.FC<FramedImageProps> = ({
 
     console.log("Loading image " + imageUrl + " " + metadata["Name"]);
 
-    axios.get(imageUrl, {
-      responseType: 'arraybuffer'
-    })
+    axios
+      .get(imageUrl, {
+        responseType: "arraybuffer",
+      })
       .then(function (response) {
         //Convert image binary to base64 then create local base64 image
-        let base64 = Buffer.from(response.data, 'binary').toString('base64')
+        let base64 = Buffer.from(response.data, "binary").toString("base64");
         const img = new window.Image();
         img.onload = function () {
           var width = (this as any).width;
@@ -107,41 +109,66 @@ const FramedImage: React.FC<FramedImageProps> = ({
           setFrameScaleY(0.027 * scaleRatio * height);
           setImageBase64(img.src);
           setLoading(false);
-        }
-        img.src = 'data:image/png;base64,' + base64;
+          onLoad();
+        };
+        img.src = "data:image/png;base64," + base64;
       })
       .catch(function (error) {
         // handle error
         console.log(error);
         setLoading(false);
-      })
+      });
   }, []);
 
-  if (isLoading || width == -1 || height == -1 || scaleRatio == -1 || frameScaleX == -1 || frameScaleY == -1 || !imageBase64) {
+  if (
+    isLoading ||
+    width == -1 ||
+    height == -1 ||
+    scaleRatio == -1 ||
+    frameScaleX == -1 ||
+    frameScaleY == -1 ||
+    !imageBase64
+  ) {
     return <mesh />;
   }
 
   //console.log("w " + width + " h " + height);
 
   return (
-
     <Suspense fallback={null}>
       {hover && (
         <InfoPanel
-          position={[x - infoXOffset, y - (height && scaleRatio ? (height * scaleRatio) / 2 : 1), z]}
+          position={[
+            x - infoXOffset,
+            y - (height && scaleRatio ? (height * scaleRatio) / 2 : 1),
+            z,
+          ]}
           info={metadata}
         />
       )}
       <mesh>
-        <Image innerRef={ref} rotation={rotation} position={[x, y, z]} url={imageBase64} args={[
-          (width && scaleRatio ? width * scaleRatio : 1),
-          (height && scaleRatio ? height * scaleRatio : 1),
-        ]} />
+        <Image
+          innerRef={ref}
+          rotation={rotation}
+          position={[x, y, z]}
+          url={imageBase64}
+          args={[
+            width && scaleRatio ? width * scaleRatio : 1,
+            height && scaleRatio ? height * scaleRatio : 1,
+          ]}
+        />
         <FBXAsset
           rotation={rotation}
           scale={[frameScaleX, frameScaleY, 0.05]}
           url={path}
-          position={[x, y - (height && scaleRatio ? (height * scaleRatio / 2) + (72 * scaleRatio) : 0), z]}
+          position={[
+            x,
+            y -
+              (height && scaleRatio
+                ? (height * scaleRatio) / 2 + 72 * scaleRatio
+                : 0),
+            z,
+          ]}
         />
       </mesh>
     </Suspense>
