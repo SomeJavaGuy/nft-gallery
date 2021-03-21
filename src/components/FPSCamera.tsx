@@ -294,7 +294,7 @@ const FPSCamera = ({
         velocity.y = 0;
         yawObject.position.y = height;
 
-        canJump = true;
+        //canJump = true;
       }
     }
   });

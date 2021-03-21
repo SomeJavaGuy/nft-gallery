@@ -34,6 +34,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ info, position, ...props }) => {
           {key} : {value}
         </p>
       ))}
+      {/*<p><b>Click for more details</b></p>*/}
     </Html>
   );
 };
