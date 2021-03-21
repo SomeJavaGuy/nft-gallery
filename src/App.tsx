@@ -15,7 +15,7 @@ function App() {
         <Route path="/test/:provider/owner/:owner">
           <ProviderTest />
         </Route>
-        <Route path="/gallery/owner/:owneraddress">
+        <Route path="/gallery/:provider/owner/:owneraddress">
           <Gallery />
         </Route>
       </Switch>

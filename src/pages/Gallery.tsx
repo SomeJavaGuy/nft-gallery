@@ -15,14 +15,25 @@ import { NormalizedAsset } from "../types/normalizedAsset";
 import RaribleApi from "../providers/rarible/raribleApi";
 import FramedImage from "../components/FramedImage";
 import TwitterShare from "../components/TwitterShare";
+import ZoraApi from "../providers/theGraph/zora";
+import SuperRareApi from "../providers/superRare/superRareApi";
 
 //Sound
 //import OpenSeaApi from "../providers/opensea/openSeaApi";
 
 const MAX_NUMBER_ASSETS = 12;
 
+const supportedProviders = {
+  zora: ZoraApi,
+  rarible: RaribleApi,
+  superrare: SuperRareApi,
+};
+
 function Gallery() {
-  const { owneraddress } = useParams<{ owneraddress: string }>();
+  const { owneraddress, provider } = useParams<{
+    owneraddress: string;
+    provider: string | keyof typeof supportedProviders;
+  }>();
 
   const [assets, setAssets] = useState<NormalizedAsset[]>([]);
   const numberOfLoadedFrames = useRef(0);
@@ -31,8 +42,10 @@ function Gallery() {
   var i = -3;
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
-
-    let api = new RaribleApi();
+    // @ts-ignore
+    if (!supportedProviders[provider]) return;
+    // @ts-ignore
+    let api = new supportedProviders[provider]();
     api
       .getTokensByOwner(owneraddress)
       .then((tokens: NormalizedAsset[]) => {
@@ -55,7 +68,7 @@ function Gallery() {
         console.error(error);
         alert("Can't load owner's token");
       });
-  }, [owneraddress]);
+  }, [owneraddress, provider]);
 
   var spawnLeftSide = true;
 
