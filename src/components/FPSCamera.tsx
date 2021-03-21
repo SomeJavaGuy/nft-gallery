@@ -12,6 +12,8 @@ const FPSCamera = ({
 }) => {
   let { scene, camera, gl } = useThree();
 
+  camera.near = 0.01;
+
   camera.position.setX(0);
   camera.position.setY(0);
   camera.position.setZ(0);

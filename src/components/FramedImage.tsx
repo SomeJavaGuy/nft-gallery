@@ -16,6 +16,7 @@ const IMG_MAX_HEIGHT = 1.5;
 type FramedImageProps = {
   imageUrl: string;
   position: position;
+  rotation: [x: number, y: number, z: number, order?: string | undefined];
   imageArgs: ImageProps["args"];
   //yFrameOffset: number;
   //zFrameOffset: number;
@@ -27,6 +28,7 @@ const FramedImage: React.FC<FramedImageProps> = ({
   imageUrl,
   imageArgs,
   position,
+  rotation,
   //yFrameOffset,
   //zFrameOffset,
   frame,
@@ -75,7 +77,7 @@ const FramedImage: React.FC<FramedImageProps> = ({
       imageUrl = imageUrl.replace("ipfs://ipfs/", "https://ipfs.io/ipfs/");
     }
 
-    console.log("Loading image " + imageUrl);
+    console.log("Loading image " + imageUrl + " " + metadata["Name"]);
 
     axios.get(imageUrl, {
       responseType: 'arraybuffer'
@@ -90,10 +92,10 @@ const FramedImage: React.FC<FramedImageProps> = ({
           //Evaluate current image ratio based on max width and max height
           var hRatio = height / IMG_MAX_HEIGHT;
           var wRatio = width / IMG_MAX_WIDTH;
-          //console.log("hRatio " + hRatio);
-          //console.log("wRatio " + wRatio);
+          console.log("hRatio " + hRatio + " " + metadata["Name"]);
+          console.log("wRatio " + wRatio + " " + metadata["Name"]);
           var scaleRatio = 1;
-          if (hRatio > wRatio && hRatio > 1) {
+          if (hRatio >= wRatio && hRatio > 1) {
             scaleRatio = 1 / hRatio;
           } else if (wRatio > hRatio && wRatio > 1) {
             scaleRatio = 1 / wRatio;
@@ -130,12 +132,13 @@ const FramedImage: React.FC<FramedImageProps> = ({
           info={metadata}
         />
       )}
-      <mesh >
-        <Image innerRef={ref} position={[x, y, z]} url={imageBase64} args={[
+      <mesh>
+        <Image innerRef={ref} rotation={rotation} position={[x, y, z]} url={imageBase64} args={[
           (width && scaleRatio ? width * scaleRatio : 1),
           (height && scaleRatio ? height * scaleRatio : 1),
         ]} />
         <FBXAsset
+          rotation={rotation}
           scale={[frameScaleX, frameScaleY, 0.05]}
           url={path}
           position={[x, y - (height && scaleRatio ? (height * scaleRatio / 2) + (72 * scaleRatio) : 0), z]}

@@ -14,6 +14,7 @@ import RaribleApi from "../providers/rarible/raribleApi";
 import FramedImage from "../components/FramedImage";
 
 import ReactGA from 'react-ga';
+import { MathUtils } from "three";
 //Sound
 //import OpenSeaApi from "../providers/opensea/openSeaApi";
 
@@ -23,7 +24,7 @@ function Gallery() {
 
     const [assets, setAssets] = useState<NormalizedAsset[]>([]);
 
-    var i = 0;
+    var i = -3;
     useEffect(() => {
 
         ReactGA.pageview(window.location.pathname + window.location.search);
@@ -36,11 +37,13 @@ function Gallery() {
                 var count = 0;
                 console.log(`tokens not tfiltered`, tokens);
                 tokens = tokens.filter((asset) => {
-                    count++;
+                   
                     //DEBUG: HARD LIMIT SET TO 5
-                    if (count > 10)
+
+                    if (count > 30)
                         return false;
 
+                        count++;
                     return asset.image_url != null && typeof asset.image_url != "undefined"
                 })
                 console.log(`tokens filtered`, tokens);
@@ -51,6 +54,8 @@ function Gallery() {
                 alert("Can't load owner's token");
             });
     }, [owneraddress]);
+
+    var spawnLeftSide = true;
 
     return (
         <div style={{ height: "100vh" }}>
@@ -63,10 +68,6 @@ function Gallery() {
                     gl.shadowMap.type = THREE.PCFSoftShadowMap;
                 }}
             >
-                {/*
-      Managed in the scene for now*/}
-                {/* <ambientLight />
-      <pointLight position={[10, 10, 10]} /> */}
 
 
                 {assets?.length > 0 &&
@@ -87,7 +88,8 @@ function Gallery() {
                             yFrameOffset={collections.hashmasks.frames[170336].yOffset}
                             zFrameOffset={collections.hashmasks.frames[170336].zOffset}
                             */
-                            position={[i += 3.5, 1.10, 0]}
+                            position={[i += 1.5, 1.20, (spawnLeftSide = !spawnLeftSide) ? -4.55 : 4.55]}
+                            rotation={[0, spawnLeftSide ? 0 : MathUtils.degToRad(180), 0]}
                             metadata={{
                                 "Name": asset.name || "",
                                 "Bid": asset.last_sale?.payment_token + " Ξ",
@@ -107,7 +109,10 @@ function Gallery() {
 
                 {/* TODO: Disable stats in prod */}
                 <Stats showPanel={0} />
-                <Scene name={"scene_room_test.json"} />
+
+                {assets?.length > 0 && (
+                    <Scene name={"scene_room_test.json"} assets={assets} />
+                )}
             </Canvas>
         </div>
     );

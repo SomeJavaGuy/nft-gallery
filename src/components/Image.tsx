@@ -14,17 +14,19 @@ export type ImageProps = {
     heightSegments?: number | undefined
   ]
   | undefined;
+  rotation: any;
 };
 
-const Image: React.FC<ImageProps> = ({ innerRef, url, position, args, ...props }) => {
+const Image: React.FC<ImageProps> = ({ innerRef, url, position, args, rotation }) => {
   const texture = useMemo(() => new THREE.TextureLoader().load(url), [url]);
-  if(args){
+  
+  if (args) {
     console.log("width " + args[0])
     console.log("height " + args[1])
   }
 
   return (
-    <mesh ref={innerRef} position={position}>
+    <mesh rotation={rotation} ref={innerRef} position={position}>
       <planeBufferGeometry attach="geometry" args={args} />
       <meshBasicMaterial attach="material" map={texture} />
     </mesh>

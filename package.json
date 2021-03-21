@@ -49,13 +49,13 @@
     ]
   },
   "devDependencies": {
-    "@react-three/drei": "^3.11.1",
-    "@types/react": "^17.0.3",
-    "@types/react-router-dom": "^5.1.7",
-    "@types/three": "^0.126.1",
     "@graphql-codegen/cli": "1.21.3",
     "@graphql-codegen/typescript": "1.21.1",
     "@graphql-codegen/typescript-graphql-request": "^3.1.0",
-    "@graphql-codegen/typescript-operations": "^1.17.15"
+    "@graphql-codegen/typescript-operations": "^1.17.15",
+    "@react-three/drei": "^3.11.1",
+    "@types/react": "^17.0.3",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/three": "^0.126.1"
   }
 }
