@@ -36,6 +36,8 @@ const FramedImage: React.FC<FramedImageProps> = ({
 
   const [isLoading, setLoading] = useState(true);
 
+  const [isGIF, setIsGIF] = useState(false);
+
   const [hover, setHover] = useState(false);
 
   const [frameScaleX, setFrameScaleX] = useState<number>(-1);
@@ -70,6 +72,14 @@ const FramedImage: React.FC<FramedImageProps> = ({
   })
 
   useEffect(() => {
+
+    var splittedUrl = imageUrl.split(".");
+    var format = splittedUrl[splittedUrl.length - 1].trim();
+
+    if (format.toLowerCase() == "gif") {
+      setIsGIF(true);
+    }
+
     //Patch for IPFS protocal
     if (imageUrl.indexOf("ipfs://ipfs/") > -1) {
       imageUrl = imageUrl.replace("ipfs://ipfs/", "https://ipfs.io/ipfs/");
@@ -106,7 +116,7 @@ const FramedImage: React.FC<FramedImageProps> = ({
           setImageBase64(img.src);
           setLoading(false);
         }
-        img.src = 'data:image/png;base64,' + base64;
+        img.src = `data:image/${format};base64,` + base64;
       })
       .catch(function (error) {
         // handle error
@@ -131,7 +141,7 @@ const FramedImage: React.FC<FramedImageProps> = ({
         />
       )}
       <mesh >
-        <Image innerRef={ref} position={[x, y, z]} url={imageBase64} args={[
+        <Image innerRef={ref} position={[x, y, z]} url={imageBase64} isGIF={isGIF} args={[
           (width && scaleRatio ? width * scaleRatio : 1),
           (height && scaleRatio ? height * scaleRatio : 1),
         ]} />
