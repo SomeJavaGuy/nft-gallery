@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import React, { useEffect, useState } from "react";
-import { Canvas } from "react-three-fiber";
-import { Html, Sky, Stats } from "@react-three/drei";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas, useThree } from "react-three-fiber";
+import { Loader, Sky, Stats, useProgress } from "@react-three/drei";
 import { useParams } from "react-router-dom";
 import ReactGA from "react-ga";
 import { MathUtils } from "three";
@@ -19,10 +19,14 @@ import TwitterShare from "../components/TwitterShare";
 //Sound
 //import OpenSeaApi from "../providers/opensea/openSeaApi";
 
+const MAX_NUMBER_ASSETS = 12;
+
 function Gallery() {
   const { owneraddress } = useParams<{ owneraddress: string }>();
 
   const [assets, setAssets] = useState<NormalizedAsset[]>([]);
+  const numberOfLoadedFrames = useRef(0);
+  const { loaded, total, progress } = useProgress();
 
   var i = -3;
   useEffect(() => {
@@ -37,7 +41,7 @@ function Gallery() {
         tokens = tokens.filter((asset) => {
           //DEBUG: HARD LIMIT SET TO 5
 
-          if (count > 30) return false;
+          if (count > MAX_NUMBER_ASSETS) return false;
 
           count++;
           return (
@@ -57,7 +61,7 @@ function Gallery() {
 
   return (
     <div style={{ height: "100vh" }}>
-      <Instructions />
+      {MAX_NUMBER_ASSETS <= numberOfLoadedFrames.current && <Instructions />}
       <Canvas
         colorManagement
         shadowMap
@@ -98,11 +102,13 @@ function Gallery() {
                 Name: asset.name || "",
                 Bid: asset.last_sale?.payment_token + " Ξ",
               }}
+              onLoad={() => {
+                numberOfLoadedFrames.current = numberOfLoadedFrames.current + 1;
+              }}
             />
           ))}
 
         <Sky inclination={0.49} rayleigh={4.3} turbidity={8.4} />
-
         <FPSCamera
           mouseMoveSensitivity={0.0015}
           speed={20.0}
@@ -117,6 +123,10 @@ function Gallery() {
           <Scene name={"scene_room_test.json"} assets={assets} />
         )}
       </Canvas>
+      <Loader
+        innerStyles={{ backgroundColor: "black" }}
+        containerStyles={{ opacity: 0.9 }}
+      />
       <TwitterShare
         style={{
           position: "absolute",
