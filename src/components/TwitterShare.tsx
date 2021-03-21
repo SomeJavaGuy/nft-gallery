@@ -1,7 +1,10 @@
 import React from "react";
-import { TwitterShareButton } from "react-twitter-embed";
+import {
+  TwitterIcon,
+  TwitterShareButton
+} from "react-share";
 
-const textInTweet = "Check out this NFT Gallery";
+const textInTweet = "Check out this NFT Gallery!";
 
 const TwitterShare = (props: any) => {
   if (typeof window === "undefined") return null;
@@ -11,8 +14,14 @@ const TwitterShare = (props: any) => {
     <div {...props}>
       <TwitterShareButton
         url={currentURL}
-        options={{ text: textInTweet, size: "large" }}
-      />
+        title={textInTweet}
+        className={"tweetbutton"}
+      >
+        <span className={"tweetbutton-text"}>Share</span>
+        <TwitterIcon
+          size={32}
+          round />
+      </TwitterShareButton>
     </div>
   );
 };
