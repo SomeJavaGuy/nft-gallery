@@ -52,11 +52,12 @@ const FPSCamera = ({
   //
 
   var instructions = document.querySelector("#instructions");
+
   var havePointerLock =
     "pointerLockElement" in document ||
     "mozPointerLockElement" in document ||
     "webkitPointerLockElement" in document;
-  if (havePointerLock) {
+  if (havePointerLock && instructions) {
     console.log("Pointer lock");
     var element: any = document.body;
     var pointerlockchange = function (event: any) {
