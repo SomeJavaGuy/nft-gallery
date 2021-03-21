@@ -37,10 +37,23 @@ function Gallery() {
 
   const [assets, setAssets] = useState<NormalizedAsset[]>([]);
   const numberOfLoadedFrames = useRef(0);
-  const { loaded, total, progress } = useProgress();
+  const { loaded, total, progress, item } = useProgress();
+
+
 
   var i = -3;
   useEffect(() => {
+
+    var id = document.getElementById("loadingDiv");
+
+    setTimeout(() => {
+      if (id)
+        id.style.display = "none";
+    }, 6000);
+
+    if (id)
+      id.style.display = "block";
+
     ReactGA.pageview(window.location.pathname + window.location.search);
     // @ts-ignore
     if (!supportedProviders[provider]) return;
@@ -143,13 +156,6 @@ function Gallery() {
         )}
       </Canvas>
 
-
-      {/*
-            <Loader
-        innerStyles={{ backgroundColor: "black" }}
-        containerStyles={{ opacity: 0.9 }}
-      />
-      */}
 
       <TwitterShare
         style={{
